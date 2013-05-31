@@ -32,12 +32,12 @@
       },
       "runtime" : {
          "requires" : {
-            "Moose" : "0",
+            "Moo::Role" : "0",
             "PGObject::Simple" : "0",
             "Test::More" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.10"
+   "version" : "0.11"
 }
