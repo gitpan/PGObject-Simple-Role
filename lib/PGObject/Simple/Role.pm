@@ -17,7 +17,7 @@ Version 0.11
 
 =cut
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 
 =head1 SYNOPSIS
@@ -161,6 +161,64 @@ sub call_dbmethod {
     return $self->_PGObject_Simple->call_dbmethod(%args) if ref $self;
     return _build__PGObject_Simple->call_dbmethod(%args);
 }
+
+#=head2 has_dbmethod (EXPERIMENTAL)
+#
+#use as __PACKAGE__->has_dbmethod (name => (default_arghash))
+#
+#For example:
+#
+#  package MyObject;
+#  use Moo;
+#  with 'PGObject::Simple::Role';
+#  has_dbmethod(save => (
+#                                 strict_args => 0,
+#                                    funcname => 'save_user', 
+#                                      schema => 'public',
+#                                        args => { admin => 0 },
+#  );
+#  $MyObject->save(args => {username => 'foo', password => 'bar'});
+#
+#Special arguments are:
+#
+#=over
+#
+#=item strict_args
+#
+#If true, args override args provided by user.
+#
+#=item returns_objects
+#
+#If true, bless returned hashrefs before returning them.
+#
+#=cut
+#
+#sub has_dbmethod {
+#    no strict 'refs';
+#    my ($target) = caller;
+#    my $name = shift;
+#    my %defaultargs = @_;
+#    my $coderef = sub {
+#       my $self = shift @_;
+#       my %args = @_;
+#       for my $key (keys %{$defaultargs{args}}){
+#           $args{args}->{$key} = $defaultargs{args}->{$key} 
+#                  unless $args{args}->{$key} or $defaultargs{strict_args};
+#       }
+#       for my $key(keys %defaultargs){
+#           next if grep(/^$key$/, qw(strict_args args returns_objects));
+#           $args{$key} = $defaultargs{$key} if $defaultargs{$key};
+#       }
+#       my @results = $self->call_dbmethod(%args);
+#       if ($defaultargs{returns_objects}){
+#           for my $ref(@results){
+#               $ref = "$target"->new(%$ref);
+#           }
+#       }
+#       return @results;
+#    };
+#    *{"${target}::${name}"} = $coderef;
+#}
 
 =head1 AUTHOR
 

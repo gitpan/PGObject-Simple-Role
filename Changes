@@ -1,7 +1,9 @@
 Revision history for PGObject-Simple-Role
 
+0.13    2013-11-06
+        Fixed test cases requiring Carp::Always, which was not in makefile.
 
-0.12    2013-11-07
+0.12    2013-11-05
         call_procedure can now be called on subclasses by package name if 
         desired.
 

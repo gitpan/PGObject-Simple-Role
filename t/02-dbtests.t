@@ -1,7 +1,6 @@
 package test;
 
 use Moo;
-use Carp::Always;
 with 'PGObject::Simple::Role';
 
 has id => (is => 'ro');
