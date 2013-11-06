@@ -17,7 +17,7 @@ Version 0.11
 
 =cut
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 
 =head1 SYNOPSIS
@@ -116,35 +116,50 @@ sub _get_dbh {
 
 =head2 call_procedure
 
-Identical interface to PGObject::Simple->call_procedure
+Identical interface to PGObject::Simple->call_procedure.
+
+This can be used on objects or on the packages themselves.  I.e.  
+mypackage->call_procedure() and $myobject->call_procedure() both work.
 
 =cut
 
 sub call_procedure {
     my $self = shift @_;
     my %args = @_;
-    $args{dbh} ||= $self->_PGObject_DBH;
-    $args{funcprefix} = $self->_PGObject_FuncPrefix 
-           if not defined $args{funcprefix};
-    return $self->_PGObject_Simple->call_procedure(%args);
+    $args{dbh} ||= $self->_PGObject_DBH if ref $self;
+    $args{dbh} ||= "$self"->_get_dbh;
+    my $fprefix = $self->_PGObject_FuncPrefix if ref $self;
+    $fprefix = "$self"->_get_prefix if not defined $fprefix;
+    $args{funcprefix} = $fprefix if not defined $args{funcprefix};
+    return $self->_PGObject_Simple->call_procedure(%args) if ref $self;
+    return _build__PGObject_Simple->call_procedure(%args);
 }
 
 =head2 call_dbmethod
 
 Identical interface to PGObject::Simple->call_dbmethod
 
+This can be used on objects or on the packages themselves.  I.e.  
+mypackage->call_dbmethod() and $myobject->call_dbmethod() both work.
+
 =cut
 
 sub call_dbmethod {
     my $self = shift @_;
     my %args = @_;
-    $args{dbh} ||= $self->_PGObject_DBH;
-    $args{funcprefix} = $self->_PGObject_FuncPrefix 
-           if not defined $args{funcprefix};
-    for my $key(keys %$self){
-        $args{args}->{$key} = $self->{$key} unless defined $args{args}->{$key};
+    $args{dbh} ||= $self->_PGObject_DBH if ref $self;
+    $args{dbh} ||= "$self"->_get_dbh;
+    my $fprefix = $self->_PGObject_FuncPrefix if ref $self;
+    $fprefix = "$self"->_get_prefix if not defined $fprefix;
+    $args{funcprefix} = $fprefix if not defined $args{funcprefix};
+    if (ref $self){
+        for my $key(keys %$self){
+            $args{args}->{$key} = $self->{$key} 
+               unless defined $args{args}->{$key};
+        }
     }
-    return $self->_PGObject_Simple->call_dbmethod(%args);
+    return $self->_PGObject_Simple->call_dbmethod(%args) if ref $self;
+    return _build__PGObject_Simple->call_dbmethod(%args);
 }
 
 =head1 AUTHOR

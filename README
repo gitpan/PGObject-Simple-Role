@@ -1,7 +1,9 @@
 PGObject-Simple-Role
 
-PGObject::Simple::Role is a role implementation of the PGObject::Simple 
-functionality aimed at cases where the quick and dirty approach is not idea.
+PGObject::Simple::Role is a Moo/Moose mapper for minimalist PGObject framework 
+(embodied in PGObject::Simple).  Basically it provides a way to easily map 
+stored procedures using the conventions of PGObject::Simple for Moo/Moose 
+environments.
 
 PGObject::Simple::Role is a Moo role which allows you to use this functionality
 in Moo and Moose environments.  The role itself makes no assumptions about 
@@ -45,11 +47,27 @@ You can also look for information at:
 
 LICENSE AND COPYRIGHT
 
-Copyright (C) 2013 Chris Travers,
+Copyright (C) 2013 Chris Travers
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+Redistribution and use in source and compiled forms with or without 
+modification, are permitted provided that the following conditions are met:
 
-See http://dev.perl.org/licenses/ for more information.
+*  Redistributions of source code (Perl) must retain the above
+   copyright notice, this list of conditions and the following disclaimer as the
+   first lines of this file unmodified.
 
+*  Redistributions in compiled form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   source code, documentation, and/or other materials provided with the 
+   distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR(S) "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR(S) BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
