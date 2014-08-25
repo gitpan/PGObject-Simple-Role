@@ -13,11 +13,11 @@ PGObject::Simple::Role - Moo/Moose mappers for minimalist PGObject framework
 
 =head1 VERSION
 
-Version 1.10.01
+Version 1.11.0
 
 =cut
 
-our $VERSION = '1.10.01';
+our $VERSION = '1.11.0';
 
 
 =head1 SYNOPSIS
@@ -227,21 +227,17 @@ sub call_dbmethod {
     my $info = PGObject->function_info(%args);
 
     my $dbargs = [];
-    for my $arg (@{$info->{args}}){
-        $arg->{name} =~ s/^in_//;
+    @$dbargs = map {
+        my $argname = $_->{name};
         my $db_arg;
-        eval { $db_arg = $self->can($arg->{name})->($self) } if ref $self;
-        if ($args{args}->{$arg->{name}}){
-            $db_arg = $args{args}->{$arg->{name}};
-        }
-        if (eval {$db_arg->can('to_db')}){
-           $db_arg = $db_arg->to_db;
-        }
-        if ($arg->{type} eq 'bytea'){
-           $db_arg = { type => 'bytea', value => $db_arg};
-        }
-        push @$dbargs, $db_arg;
-    }
+        $argname =~ s/^in_//;
+        eval { $db_arg = $self->can($argname)->($self) } if ref $self;
+        $db_arg = $args{args}->{$argname} if $args{args}->{$argname};
+        $db_arg = $db_arg->to_db if eval {$db_arg->can('to_db')};
+        $db_arg = { type => 'bytea', value => $db_arg} if $_->{type} eq 'bytea';
+
+        $db_arg;
+    } @{$info->{args}};
     $args{args} = $dbargs;
     my @rows;
     if (ref $self){
@@ -322,7 +318,7 @@ L<http://search.cpan.org/dist/PGObject-Simple-Role/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013 Chris Travers,.
+Copyright 2013-2014 Chris Travers,.
 
 Redistribution and use in source and compiled forms with or without 
 modification, are permitted provided that the following conditions are met:
